@@ -1,0 +1,32 @@
+name: PHPCSFixer
+
+on:
+    pull_request:
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+jobs:
+    phpcsfixer:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                php_version: ["8.4"]
+
+        name: PHPCSFixer with PHP ${{ matrix.php_version }}
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php_version }}
+
+            - name: Install Composer packages
+              run: composer install -q --no-ansi --no-interaction --prefer-dist --ignore-platform-reqs
+
+            - name: Run PHPCSFixer
+              run: $GITHUB_WORKSPACE/vendor/bin/php-cs-fixer fix --dry-run
