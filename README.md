@@ -6,12 +6,18 @@
 
 A [Symfony](https://symfony.com/) bundle that implements the proxy for the Backend for Frontends pattern.
 
----
-
 The approach this bundle takes is one of composition. It does not provide all of the required functionality of the BFF pattern on its own.
 Mainly, the OAuth2 token management and authentication at the upstream service is not included in this bundle.
 
-## Docs
+## Installation
+
+This library is [PSR-4](https://www.php-fig.org/psr/psr-4/) compatible and can be installed via PHP's dependency manager [Composer](https://getcomposer.org).
+
+```shell
+composer require danielburger1337/bff-proxy-bundle
+```
+
+## Documentation
 
 TODO
 
