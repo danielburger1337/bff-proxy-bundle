@@ -61,7 +61,7 @@ class LocalProxyServiceTest extends TestCase
         $request = $this->createMock(Request::class);
         $request->expects($this->once())
             ->method('duplicate')
-            ->with(null, null, ['_route_params' => $routeAttributes, ...$routeAttributes, '_stateless' => false], null, null, null)
+            ->with(null, null, ['_route_params' => $routeAttributes, ...$routeAttributes, '_stateless' => false, 'is_bff_proxy_request' => true], null, null, null)
             ->willReturnSelf();
 
         $service->proxyRequest('/path', $request);
