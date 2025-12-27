@@ -59,6 +59,8 @@ class LocalProxyService
         $routeAttributes['_route_params'] = $routeAttributes;
         $routeAttributes['_stateless'] = false;
 
+        $routeAttributes['is_bff_proxy_request'] = true;
+
         $subRequest = $request->duplicate(attributes: $routeAttributes);
 
         return $this->httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST, false);
