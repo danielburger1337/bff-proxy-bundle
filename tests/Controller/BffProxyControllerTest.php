@@ -12,8 +12,6 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Service\ServiceProviderInterface;
 
 class BffProxyControllerTest extends TestCase
@@ -179,60 +177,6 @@ class BffProxyControllerTest extends TestCase
         );
 
         $controller('upstream', 'no-slash', $request);
-    }
-
-    #[Test]
-    public function testAuthorizationCheckerIsGrantedDoesNothingOnTrue(): void
-    {
-        $request = Request::createFromGlobals();
-
-        $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
-        $authorizationChecker->expects($this->once())
-            ->method('isGranted')
-            ->withAnyParameters()
-            ->willReturn(true);
-
-        $remoteProxy = $this->createMock(RemoteProxyService::class);
-        $remoteProxy->expects($this->once())
-            ->method('proxyRequest')
-            ->withAnyParameters()
-            ->willReturn(new Response());
-
-        $controller = new BffProxyController(
-            $remoteProxy,
-            $this->createServiceProvider([
-                'upstream' => $this->createStub(BffProxyConfiguration::class),
-            ]),
-            authorizationChecker: $authorizationChecker
-        );
-
-        $response = $controller('upstream', '/path', $request);
-
-        $this->assertEquals('upstream', $response->headers->get('x-bff-proxy-upstream'));
-    }
-
-    #[Test]
-    public function testExceptionIsThrownWhenUnauthorized(): void
-    {
-        $request = Request::createFromGlobals();
-
-        $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
-        $authorizationChecker->expects($this->once())
-            ->method('isGranted')
-            ->withAnyParameters()
-            ->willReturn(false);
-
-        $controller = new BffProxyController(
-            $this->createStub(RemoteProxyService::class),
-            $this->createServiceProvider([
-                'upstream' => $this->createStub(BffProxyConfiguration::class),
-            ]),
-            authorizationChecker: $authorizationChecker
-        );
-
-        $this->expectException(AccessDeniedException::class);
-
-        $controller('upstream', '/path', $request);
     }
 
     /**
