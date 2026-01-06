@@ -83,22 +83,6 @@ class RemoteProxyServiceTest extends TestCase
     }
 
     #[Test]
-    public function testProxyRequestPrependsSlash(): void
-    {
-        $request = Request::create('/bff-proxy', 'POST');
-
-        $client = $this->createMock(ClientInterface::class);
-        $client->expects($this->once())
-            ->method('sendRequest')
-            ->withAnyParameters()
-            ->willReturn(new Response());
-
-        $bffConfig = $this->createConfiguration($request, '/no-slash', $client);
-
-        $this->service->proxyRequest('no-slash', $request, $bffConfig);
-    }
-
-    #[Test]
     public function testProxyRequestAddsQueryParameter(): void
     {
         $queryString = 'param=foo&param2=bar';

@@ -43,6 +43,10 @@ class BffProxyController
             throw new NotFoundHttpException(\sprintf('The upstream "%s" has no configuration defined.', $upstream), $e);
         }
 
+        if (!\str_starts_with($route, '/')) {
+            $route = '/'.$route;
+        }
+
         if (null !== $this->authorizationChecker) {
             $sub = new BffProxyVoterSubject($upstream, $bffConfig);
             $accessDecision = new AccessDecision();
