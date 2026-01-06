@@ -21,10 +21,6 @@ class RemoteProxyService
 
     public function proxyRequest(string $path, Request $request, BffProxyConfiguration $bffConfig): Response
     {
-        if (!\str_starts_with($path, '/')) {
-            $path = '/'.$path;
-        }
-
         $queryParams = $request->query->all();
         unset($queryParams[$this->optionsParameter]);
 

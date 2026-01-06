@@ -138,6 +138,50 @@ class BffProxyControllerTest extends TestCase
     }
 
     #[Test]
+    public function testPrependsSlashToRouteWithExistingSlash(): void
+    {
+        $request = Request::createFromGlobals();
+        $stub = $this->createStub(BffProxyConfiguration::class);
+
+        $remoteProxy = $this->createMock(RemoteProxyService::class);
+        $remoteProxy->expects($this->once())
+            ->method('proxyRequest')
+            ->with('/with-slash', $request, $stub)
+            ->willReturn(new Response());
+
+        $controller = new BffProxyController(
+            $remoteProxy,
+            $this->createServiceProvider([
+                'upstream' => $stub,
+            ]),
+        );
+
+        $controller('upstream', '/with-slash', $request);
+    }
+
+    #[Test]
+    public function testPrependsSlashToRoute(): void
+    {
+        $request = Request::createFromGlobals();
+        $stub = $this->createStub(BffProxyConfiguration::class);
+
+        $remoteProxy = $this->createMock(RemoteProxyService::class);
+        $remoteProxy->expects($this->once())
+            ->method('proxyRequest')
+            ->with('/no-slash', $request, $stub)
+            ->willReturn(new Response());
+
+        $controller = new BffProxyController(
+            $remoteProxy,
+            $this->createServiceProvider([
+                'upstream' => $stub,
+            ]),
+        );
+
+        $controller('upstream', 'no-slash', $request);
+    }
+
+    #[Test]
     public function testAuthorizationCheckerIsGrantedDoesNothingOnTrue(): void
     {
         $request = Request::createFromGlobals();

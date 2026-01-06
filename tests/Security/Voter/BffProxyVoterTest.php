@@ -13,6 +13,7 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -37,8 +38,9 @@ class BffProxyVoterTest extends TestCase
     public function testVote(array $attribute, bool $includeVote, int $expected): void
     {
         $token = $this->createStub(TokenInterface::class);
+        $request = $this->createStub(Request::class);
 
-        $subject = new BffProxyVoterSubject('upstream', new BffProxyConfiguration(
+        $subject = new BffProxyVoterSubject('upstream', '/route', $request, new BffProxyConfiguration(
             $this->createStub(ClientInterface::class),
             $this->createStub(RequestFactoryInterface::class),
             $this->createStub(StreamFactoryInterface::class),
