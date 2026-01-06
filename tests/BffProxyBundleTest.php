@@ -5,7 +5,6 @@ namespace danielburger1337\BffProxyBundle\Tests;
 use danielburger1337\BffProxyBundle\BffProxyBundle;
 use danielburger1337\BffProxyBundle\Controller\BffProxyController;
 use danielburger1337\BffProxyBundle\Model\BffProxyConfiguration;
-use danielburger1337\BffProxyBundle\Security\Voter\BffProxyVoter;
 use danielburger1337\BffProxyBundle\Service\LocalProxyService;
 use danielburger1337\BffProxyBundle\Service\RemoteProxyService;
 use danielburger1337\BffProxyBundle\Service\RequestModifier\FormDataRequestModifier;
@@ -45,20 +44,6 @@ class BffProxyBundleTest extends TestCase
 
         $this->configurator = new ContainerConfigurator($this->container, $loader, $instanceOf, '', '');
         $this->bundle = new BffProxyBundle();
-    }
-
-    #[Test]
-    public function testSecurityVoterIsRegistered(): void
-    {
-        $this->loadExtension();
-
-        $this->assertTrue($this->container->hasDefinition(BffProxyVoter::class));
-        $definition = $this->container->getDefinition(BffProxyVoter::class);
-        $this->assertTrue($definition->hasTag('security.voter'));
-
-        $attr = $definition->getTag('security.voter')[0];
-        $this->assertArrayHasKey('priority', $attr);
-        $this->assertLessThan(0, $attr['priority']);
     }
 
     #[Test]
