@@ -48,7 +48,7 @@ class BffProxyController
         }
 
         if (null !== $this->authorizationChecker) {
-            $sub = new BffProxyVoterSubject($upstream, $bffConfig);
+            $sub = new BffProxyVoterSubject($upstream, $route, $bffConfig);
             $accessDecision = new AccessDecision();
             if (!$this->authorizationChecker->isGranted(BffProxyVoter::ATTRIBUTE_ALLOW_PROXY, $sub, $accessDecision)) {
                 $exception = new AccessDeniedException();

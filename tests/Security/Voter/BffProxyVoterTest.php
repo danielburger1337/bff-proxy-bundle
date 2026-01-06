@@ -38,7 +38,7 @@ class BffProxyVoterTest extends TestCase
     {
         $token = $this->createStub(TokenInterface::class);
 
-        $subject = new BffProxyVoterSubject('upstream', new BffProxyConfiguration(
+        $subject = new BffProxyVoterSubject('upstream', '/route', new BffProxyConfiguration(
             $this->createStub(ClientInterface::class),
             $this->createStub(RequestFactoryInterface::class),
             $this->createStub(StreamFactoryInterface::class),
